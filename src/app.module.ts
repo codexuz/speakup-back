@@ -31,6 +31,7 @@ import { ReadingPassagesModule } from './reading-passages/reading-passages.modul
 import { ReadingQuestionsModule } from './reading-questions/reading-questions.module.js';
 import { UserResponseModule } from './user-response/user-response.module.js';
 import { ReadingAnswersModule } from './reading-answers/reading-answers.module.js';
+import { TestsModule } from './tests/tests.module.js';
 
 AdminJS.registerAdapter({
   Resource: AdminJSSequelize.Resource,
@@ -46,7 +47,7 @@ AdminJS.registerAdapter({
      SequelizeModule.forRoot({
       dialect: "postgres",
       uri: "postgresql://postgres.bkxhwaeluswfwfxavmpt:Jackyshow_98@aws-0-ap-south-1.pooler.supabase.com:6543/postgres",
-      sync: { force: false },
+      sync: { alter: false },
       models: [...Models],
       autoLoadModels: true,
       logging: true,
@@ -84,6 +85,7 @@ AdminJS.registerAdapter({
     ReadingQuestionsModule,
     UserResponseModule,
     ReadingAnswersModule,
+    TestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

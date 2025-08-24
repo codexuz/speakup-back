@@ -9,7 +9,7 @@ import { ReadingAnswer } from "../reading-answers/entities/reading-answer.entity
 import { ReadingPassages } from "../reading-passages/entities/reading-passage.entity.js";
 import { ReadingQuestion } from "../reading-questions/entities/reading-question.entity.js";
 import { UserResponse } from "../user-response/entities/user-response.entity.js";
-
+import { Test } from "../tests/entities/test.entity.js";
 
 export const Models = [
     User,
@@ -18,14 +18,19 @@ export const Models = [
     SpeakingPart,
     SpeakingResponse,
     File,
+    Test,
     Reading,
     ReadingAnswer,
     ReadingPassages,
     ReadingQuestion,
-    UserResponse
+    UserResponse,
 ] 
 
 export function associateModels() {
+       // Tests associations
+   Test.hasMany(Reading, { foreignKey: 'test_id' });
+   Reading.belongsTo(Test, { foreignKey: 'test_id' });
+
     // Define associations here
    SpeakingTests.hasMany(SpeakingPart, { foreignKey: 'test_id' });
    SpeakingPart.belongsTo(SpeakingTests, { foreignKey: 'test_id' });
@@ -53,4 +58,5 @@ export function associateModels() {
    UserResponse.belongsTo(Reading, { foreignKey: 'reading_id' });
    User.hasMany(UserResponse, { foreignKey: 'user_id' });
    UserResponse.belongsTo(User, { foreignKey: 'user_id' });
+
 }

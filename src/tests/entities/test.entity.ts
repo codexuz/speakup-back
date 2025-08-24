@@ -8,10 +8,10 @@ import {
 } from "sequelize-typescript";
 
 @Table({
-  tableName: "reading_passages",
+  tableName: "tests",
   timestamps: false,
 })
-export class ReadingPassages extends Model<ReadingPassages> {
+export class Test extends Model<Test> {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
@@ -20,22 +20,22 @@ export class ReadingPassages extends Model<ReadingPassages> {
   id: string;
 
   @AllowNull(false)
-  @Column(DataType.TEXT)
+  @Column({
+    type: DataType.STRING(500),
+  })
   title!: string;
 
-  @AllowNull(false)
-  @Column({
-    type: DataType.ENUM('part1', 'part2', 'part3', 'part4', 'part5'),
-  })
-  part!: string;
-
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.TEXT)
-  reading_text!: string;
+  description!: string;
 
   @AllowNull(false)
-  @Column(DataType.UUID)
-  reading_id!: string;
+  @Column(DataType.BOOLEAN)
+  isPublished!: boolean;
+
+  @AllowNull(true)
+  @Column(DataType.ENUM("ielts", "cefr"))
+  test_type!: string;
 
   @Default(DataType.NOW)
   @Column(DataType.DATE)

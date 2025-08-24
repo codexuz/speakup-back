@@ -20,8 +20,8 @@ export class ReadingQuestion extends Model<ReadingQuestion> {
   id: string;
 
   @AllowNull(false)
-  @Column(DataType.JSONB)
-  content!: object;
+  @Column(DataType.TEXT)
+  content!: string;
 
   @AllowNull(false)
   @Column(DataType.ENUM('part1', 'part2', 'part3', 'part4', 'part5'))

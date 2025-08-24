@@ -1,9 +1,9 @@
-import { IsEnum, IsNotEmpty, IsObject, IsUUID } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsObject, IsString, IsUUID } from 'class-validator';
 
 export class CreateReadingQuestionDto {
   @IsNotEmpty()
-  @IsObject()
-  content: object;
+  @IsString()
+  content: string;
 
   @IsNotEmpty()
   @IsEnum(['part1', 'part2', 'part3', 'part4', 'part5'])

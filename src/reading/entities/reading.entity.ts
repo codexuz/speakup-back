@@ -25,13 +25,17 @@ export class Reading extends Model<Reading> {
   })
   title!: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.UUID)
   test_id!: string;
 
   @AllowNull(false)
   @Column(DataType.BOOLEAN)
   isActive!: boolean;
+
+  @AllowNull(true)
+  @Column(DataType.ENUM("ielts", "cefr"))
+  reading_type!: string;
 
   @Default(DataType.NOW)
   @Column(DataType.DATE)
