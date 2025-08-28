@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Req, Delete, HttpCode, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { UsersService } from './users.service.js';
-import { CreateUserDto } from './dto/create-user.dto.js';
-import { UpdateUserDto } from './dto/update-user.dto.js';
-import { LoginUserDto } from './dto/login-user.dto.js';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Req,
+  Delete,
+  HttpCode,
+  UnauthorizedException,
+  UseGuards,
+} from "@nestjs/common";
+import { UsersService } from "./users.service.js";
+import { CreateUserDto } from "./dto/create-user.dto.js";
+import { UpdateUserDto } from "./dto/update-user.dto.js";
+import { LoginUserDto } from "./dto/login-user.dto.js";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard.js";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -20,44 +32,44 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('telegram/:telegramId')
+  @Get("telegram/:telegramId")
   @UseGuards(JwtAuthGuard)
-  findByTelegramId(@Param('telegramId') telegramId: string) {
+  findByTelegramId(@Param("telegramId") telegramId: string) {
     return this.usersService.findByTelegramId(telegramId);
   }
 
-  @Get('name/:firstName')
+  @Get("name/:firstName")
   @UseGuards(JwtAuthGuard)
-  findByFirstName(@Param('firstName') firstName: string) {
+  findByFirstName(@Param("firstName") firstName: string) {
     return this.usersService.findByFirstName(firstName);
   }
 
-  @Get(':id')
+  @Get("me")
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string) {
+  async getProfile(@Req() req) {
+    console.log(req);
+    return this.usersService.getProfile(req.user.sub);
+  }
+
+  @Get(":id")
+  @UseGuards(JwtAuthGuard)
+  findOne(@Param("id") id: string) {
     return this.usersService.findOne(id);
   }
 
-
-   @Get('me')
+  @Patch(":id")
   @UseGuards(JwtAuthGuard)
-   async getProfile(@Req() req) {
-    return this.usersService.getProfile(req.user.userId); 
-  }
-
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string) {
+  remove(@Param("id") id: string) {
     return this.usersService.remove(id);
   }
 
-  @Post('login')
+  @Post("login")
   @HttpCode(200)
   async login(@Body() loginUserDto: LoginUserDto) {
     try {
@@ -67,4 +79,3 @@ export class UsersController {
     }
   }
 }
-
