@@ -88,4 +88,18 @@ export class UsersService {
     const payload = { sub: user.id, role: user.role, telegram_id: user.telegramId };
     return { access_token: this.jwtService.sign(payload), role: user.role, user };
   }
+
+  async getProfile(userId: string): Promise<User> {
+  const user = await this.userModel.findByPk(userId, {
+    attributes: { exclude: ['password_hash'] },
+  });
+
+  if (!user) {
+    throw new NotFoundException('User not found');
+  }
+
+  return user;
 }
+
+}
+
