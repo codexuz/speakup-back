@@ -74,8 +74,8 @@ const options: AdminJSOptions = {
           updatedAt: {
             isVisible: { list: true, filter: true, show: true, edit: false },
           },
-          sample_answer: { type: "richtext" },
-          question: { type: "richtext" },
+          sample_answer:  {type: "textarea", props: { rows: 20 }},
+          question:  {type: "textarea", props: { rows: 20 }},
         },
       },
       features: [importExportFeature({ componentLoader })],
