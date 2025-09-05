@@ -37,7 +37,7 @@ export function associateModels() {
   User.hasMany(MyPurchasedTest, { foreignKey: "user_id" });
   MyPurchasedTest.belongsTo(User, { foreignKey: "user_id" });
 
-  Test.hasMany(MyPurchasedTest, { foreignKey: "test_id" });
+  SpeakingTests.hasMany(MyPurchasedTest, { foreignKey: "test_id" });
   MyPurchasedTest.belongsTo(Test, { foreignKey: "test_id" });
 
   // Define associations here
@@ -68,3 +68,4 @@ export function associateModels() {
   User.hasMany(UserResponse, { foreignKey: "user_id" });
   UserResponse.belongsTo(User, { foreignKey: "user_id" });
 }
+
