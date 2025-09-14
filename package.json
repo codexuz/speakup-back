@@ -15,11 +15,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@adminjs/express": "^6.1.0",
-    "@adminjs/import-export": "^3.0.0",
-    "@adminjs/nestjs": "^6.1.0",
-    "@adminjs/sequelize": "^4.1.1",
-    "@adminjs/upload": "^4.0.2",
     "@deepgram/sdk": "^4.11.2",
     "@grammyjs/conversations": "^2.1.0",
     "@nestjs/axios": "^4.0.1",
@@ -34,7 +29,6 @@
     "@nestjs/sequelize": "^11.0.0",
     "@nestjs/serve-static": "^4.0.2",
     "@types/jsonwebtoken": "^9.0.10",
-    "adminjs": "^7.7.2",
     "bcrypt": "^6.0.0",
     "bullmq": "^5.56.10",
     "class-transformer": "^0.5.1",
