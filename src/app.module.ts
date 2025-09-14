@@ -1,12 +1,7 @@
 import { Module, OnModuleInit } from '@nestjs/common';
-import { AdminModule } from '@adminjs/nestjs';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import provider from './admin/auth-provider.js';
-import options from './admin/options.js';
-import AdminJS from 'adminjs';
-import * as AdminJSSequelize from '@adminjs/sequelize'
 
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
@@ -34,10 +29,7 @@ import { ReadingAnswersModule } from './reading-answers/reading-answers.module.j
 import { TestsModule } from './tests/tests.module.js';
 import { MyPurchasedTestsModule } from './my-purchased-tests/my-purchased-tests.module.js';
 
-AdminJS.registerAdapter({
-  Resource: AdminJSSequelize.Resource,
-  Database: AdminJSSequelize.Database,
-});
+
 
 @Module({
   imports: [
@@ -52,23 +44,6 @@ AdminJS.registerAdapter({
       models: [...Models],
       autoLoadModels: true,
       logging: true,
-    }),
-    AdminModule.createAdminAsync({
-      useFactory: async () => {
-        return {
-          adminJsOptions: options,
-          auth: {
-            provider,
-            cookiePassword: process.env.COOKIE_SECRET,
-            cookieName: 'adminjs',
-          },
-          sessionOptions: {
-            resave: true,
-            saveUninitialized: true,
-            secret: process.env.COOKIE_SECRET,
-          },
-        };
-      },
     }),
     AuthModule,
     UsersModule,
