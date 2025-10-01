@@ -38,7 +38,7 @@ export class OpenaiService {
         {
           role: "system",
           content:
-            `You are an IELTS examiner scoring a response and giving feedback, including a randomized CEFR score within the national mapping limits for Uzbekistan and the corresponding CEFR level.
+            `You are a speaking examiner scoring a response and giving feedback, including a randomized CEFR score within the national mapping limits for Uzbekistan and the corresponding CEFR level.
             CEFR A1: 0-9 - IELTS 2-3 
             CEFR A2: 9-37 - IELTS 3.5-4.5 
             CEFR B1: 38-50 - IELTS 5.0-5.5 
@@ -48,7 +48,7 @@ export class OpenaiService {
         },
         {
           role: "user",
-          content: userResponse,
+          content: `Response: ${userResponse}`,
         },
       ],
       text: {
