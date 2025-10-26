@@ -9,6 +9,7 @@ import { DeepgramService } from "../deepgram/deepgram.service.js";
 import { OpenaiService } from "../openai/openai.service.js";
 import { VocabularyLevelService } from "../vocabulary-level/vocabulary-level.service.js";
 import { MyPurchasedTestsService } from "../my-purchased-tests/my-purchased-tests.service.js";
+import { SpeakingPartsService } from "../speaking-parts/speaking-parts.service.js";
 
 @Injectable()
 export class SpeakingResponseService {
@@ -20,7 +21,8 @@ export class SpeakingResponseService {
     private readonly deepgramService: DeepgramService,
     private readonly openaiService: OpenaiService,
     private readonly vocabularyLevelService: VocabularyLevelService,
-    private readonly myPurchasedTestsService: MyPurchasedTestsService
+    private readonly myPurchasedTestsService: MyPurchasedTestsService,
+    private readonly speakingPartsService: SpeakingPartsService
   ) {}
 
   /**
@@ -216,11 +218,35 @@ export class SpeakingResponseService {
         return emptyResponseMessage;
       }
 
-      // Step 2: Assess speaking using OpenAI
+      // Step 2: Get speaking test questions
+      this.logger.log(`Getting questions for test ${response.test_id}`);
+      const speakingParts = await this.speakingPartsService.findByTestId(response.test_id);
+      
+      // Format questions by part
+      const questionsByPart = speakingParts.reduce((acc, part) => {
+        if (!acc[part.part]) {
+          acc[part.part] = [];
+        }
+        acc[part.part].push(part.question);
+        return acc;
+      }, {} as Record<string, string[]>);
+
+      // Create formatted questions string
+      let formattedQuestions = "Questions:\n";
+      Object.keys(questionsByPart).sort().forEach(partNumber => {
+        formattedQuestions += `Part ${partNumber}:\n`;
+        questionsByPart[partNumber].forEach((question, index) => {
+          formattedQuestions += `${index + 1}. ${question}\n`;
+        });
+        formattedQuestions += "\n";
+      });
+      formattedQuestions += `Response: ${transcript}`;
+
+      // Step 3: Assess speaking using OpenAI with questions context
       this.logger.log(
         `Analyzing speaking with OpenAI for response ${responseId}`
       );
-      const aiAssessment = await this.openaiService.assessSpeaking(transcript);
+      const aiAssessment = await this.openaiService.assessSpeaking(formattedQuestions);
 
       // Step 3: Analyze vocabulary level
       this.logger.log(`Analyzing vocabulary level for response ${responseId}`);
@@ -235,6 +261,7 @@ export class SpeakingResponseService {
       const assessmentResult = {
         id: responseId,
         transcript,
+        questions: questionsByPart,
         aiAssessment,
         vocabularyLevel: vocabLevelResult,
         wpm,

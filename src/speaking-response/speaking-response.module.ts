@@ -8,6 +8,7 @@ import { DeepgramModule } from "../deepgram/deepgram.module.js";
 import { OpenaiModule } from "../openai/openai.module.js";
 import { VocabularyLevelModule } from "../vocabulary-level/vocabulary-level.module.js";
 import { MyPurchasedTestsModule } from "../my-purchased-tests/my-purchased-tests.module.js";
+import { SpeakingPartsModule } from "../speaking-parts/speaking-parts.module.js";
 import { AssessmentStatusService } from "./assessment-status.service.js";
 
 @Module({
@@ -18,6 +19,7 @@ import { AssessmentStatusService } from "./assessment-status.service.js";
     OpenaiModule,
     VocabularyLevelModule,
     MyPurchasedTestsModule,
+    SpeakingPartsModule,
   ],
   controllers: [SpeakingResponseController],
   providers: [SpeakingResponseService, AssessmentStatusService],
