@@ -12,5 +12,6 @@ import { AuthModule } from '../auth/auth.module.js';
   ],
   controllers: [SpeakingPartsController],
   providers: [SpeakingPartsService],
+  exports: [SpeakingPartsService],
 })
 export class SpeakingPartsModule {}
