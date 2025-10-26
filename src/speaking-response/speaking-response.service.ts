@@ -121,6 +121,24 @@ export class SpeakingResponseService {
   }
 
   /**
+   * Calculate Words Per Minute (WPM) from text
+   * @param text The transcribed text
+   * @returns WPM value
+   */
+  private calculateWPM(text: string): number {
+    // Split the text by spaces to get the number of words
+    const words = text.trim().split(/\s+/).length;
+    
+    // Convert time from seconds to minutes
+    const timeInMinutes = 480 / 60;
+    
+    // Calculate words per minute
+    const wpm = words / timeInMinutes;
+    
+    return wpm;
+  }
+
+  /**
    * Assess a speaking response using multiple services
    * @param responseId ID of the speaking response to assess
    * @returns Assessment results including transcription, AI evaluation, and vocabulary level
@@ -157,15 +175,22 @@ export class SpeakingResponseService {
         // Otherwise, generate a new transcript
         this.logger.log(`Transcribing audio from URL: ${response.audio_url}`);
         const transcriptionResult =
-          await this.deepgramService.transcribeRemoteAudio(response.audio_url);
+          await this.deepgramService.transcribeSpeakingResponse(response.audio_url);
         transcript =
           transcriptionResult.results.channels[0].alternatives[0].transcript ||
           "";
 
-        // Save transcript back to the response
+        // Save transcript and speaking metrics back to the response
         response.transcript = transcript;
+        
+        // Store the detailed transcription result including speaking metrics
+        response.response = {
+          ...(response.response || {}),
+          transcription_details: transcriptionResult.speaking_metrics,
+        };
+        
         await response.save();
-        this.logger.log(`Transcript saved for response ${responseId}`);
+        this.logger.log(`Transcript and speaking metrics saved for response ${responseId}`);
       }
 
       // Check if the user said nothing or very little
@@ -202,16 +227,21 @@ export class SpeakingResponseService {
       const vocabLevelResult =
         await this.vocabularyLevelService.checkLevel(transcript);
 
-      // Step 4: Combine the results
+      // Step 4: Calculate Words Per Minute (WPM)
+      this.logger.log(`Calculating WPM for response ${responseId}`);
+      const wpm = this.calculateWPM(transcript);
+
+      // Step 5: Combine the results
       const assessmentResult = {
         id: responseId,
         transcript,
         aiAssessment,
         vocabularyLevel: vocabLevelResult,
+        wpm,
         timestamp: new Date(),
       };
 
-      // Step 5: Update the response with assessment data
+      // Step 6: Update the response with assessment data
       response.response = {
         ...(response.response || {}),
         assessment: assessmentResult,
