@@ -48,7 +48,7 @@ export class OpenaiService {
         },
         {
           role: "user",
-          content: `Response: ${userResponse}`,
+          content: `${userResponse}`,
         },
       ],
       text: {
@@ -61,4 +61,5 @@ export class OpenaiService {
   
 
 }
+
 
