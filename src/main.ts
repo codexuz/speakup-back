@@ -16,6 +16,18 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, "..", "uploads"), {
     prefix: "/uploads/", // so /uploads/filename.jpg works
+    setHeaders: (res, path) => {
+      // Add CORS headers for audio files
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Range');
+      res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range');
+      
+      // Set proper cache control for audio files
+      if (path.match(/\.(mp3|wav|ogg|m4a|webm)$/i)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000');
+      }
+    },
   });
 
   app.enableCors({
