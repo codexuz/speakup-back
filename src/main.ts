@@ -31,25 +31,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: (origin, callback) => {
-      if (
-        !origin ||
-        origin.startsWith("http://localhost") ||
-        origin.startsWith("http://127.0.0.1")
-      ) {
-        callback(null, true);
-      } else if (
-        [
-          "https://speak.impulselc.uz",
-          "https://speakup.edumoacademy.uz",
-        ].includes(origin)
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
+    origin: "*",
   }); // Enable CORS for frontend integration
 
   const port = process.env.PORT ?? 3000;
