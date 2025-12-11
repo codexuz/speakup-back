@@ -19,7 +19,13 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: "*", // Adjust this to your frontend URL
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://speak.impulselc.uz",
+      "https://speakup.edumoacademy.uz",
+    ],
+    credentials: true,
   }); // Enable CORS for frontend integration
 
   const port = process.env.PORT ?? 3000;
